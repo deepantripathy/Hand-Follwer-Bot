@@ -1,0 +1,893 @@
+   1               		.file	"main.c"
+   2               		.arch atmega16
+   3               	__SREG__ = 0x3f
+   4               	__SP_H__ = 0x3e
+   5               	__SP_L__ = 0x3d
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  11               		.text
+  12               	.Ltext0:
+  69               	.global	dely_ns
+  71               	dely_ns:
+  73               	.Ltext1:
+   1:./lcd.h       **** /*	LCD.h
+   2:./lcd.h       **** K-TECHNOLOGY embedded systems
+   3:./lcd.h       **** 
+   4:./lcd.h       **** 	This header files have implementation of some common finctions of the LCD.
+   5:./lcd.h       **** 	Include this header file in your C code. Call the lcd_init() function before
+   6:./lcd.h       **** 	calling any other functions to initialize the lcd.
+   7:./lcd.h       **** 
+   8:./lcd.h       **** 
+   9:./lcd.h       **** 	lcd_init() ----- Call the lcd_init() function before calling any other functions
+  10:./lcd.h       **** 			  to initialize the lcd.
+  11:./lcd.h       **** 	lcd_cmd() ------ This function is used to give any command instructions to the
+  12:./lcd.h       **** 			  LCD. For e.g lcd_cmd(0x01) will give the clear command.
+  13:./lcd.h       **** 	lcd_char() ----- This function will display a single character on the LCD display.
+  14:./lcd.h       **** 			  For example lcd_char(0x61) will display A. Again lcd_char('b')
+  15:./lcd.h       **** 			  will display b.
+  16:./lcd.h       **** 	lcd_string()---- This function will display a string. An example of this would be
+  17:./lcd.h       **** 			  like lcd_string("This is AVR")
+  18:./lcd.h       **** 	lcd_showvalue()- This will show a 3-digit decimal value on the LCD. For example if
+  19:./lcd.h       **** 			  we give lcd_showvalue(0xFF) then 255 will be displayed.
+  20:./lcd.h       **** 	lcd_gotoxy()--- Will set the cursor at a particular position on of the LCD.
+  21:./lcd.h       **** 			  So lcd_gotoxy(1,4) will set the cursor at the 2d row 3rd column
+  22:./lcd.h       **** 			  row and column address are starts from(0,0)
+  23:./lcd.h       **** 	lcd_clear()---To clear the LCD
+  24:./lcd.h       **** 	
+  25:./lcd.h       **** */
+  26:./lcd.h       **** 
+  27:./lcd.h       **** #ifndef _LCD_H_
+  28:./lcd.h       **** #define _LCD_H_
+  29:./lcd.h       **** 
+  30:./lcd.h       **** 
+  31:./lcd.h       **** unsigned char k=0,j=0;
+  32:./lcd.h       **** unsigned char save=0;
+  33:./lcd.h       **** 
+  34:./lcd.h       **** void lcd_init(void);
+  35:./lcd.h       **** void lcd_cmd(unsigned char cmd);
+  36:./lcd.h       **** void latch(void);
+  37:./lcd.h       **** void dely_ns(unsigned char tim);
+  38:./lcd.h       **** void lcd_char(unsigned char single);
+  39:./lcd.h       **** void lcd_string(unsigned char str[32]);
+  40:./lcd.h       **** void lcd_showvalue(unsigned char num);
+  41:./lcd.h       **** void lcd_gotoxy(unsigned char row,unsigned char column);
+  42:./lcd.h       **** void delay_ms(unsigned int ms);
+  43:./lcd.h       **** void lcd_clear();
+  44:./lcd.h       **** 
+  45:./lcd.h       **** void lcd_init(void)	//init the lcd
+  46:./lcd.h       **** {	
+  47:./lcd.h       **** 	delay_ms(20);
+  48:./lcd.h       **** 	save=PORTC;
+  49:./lcd.h       **** 	DDRC=0xFF;
+  50:./lcd.h       **** 	delay_ms(15);
+  51:./lcd.h       **** 	PORTC=0x20;			//interface setup		
+  52:./lcd.h       **** 	lcd_cmd(0x01);
+  53:./lcd.h       **** 	lcd_cmd(0x02);
+  54:./lcd.h       **** 	lcd_cmd(0X80);
+  55:./lcd.h       **** 	delay_ms(20);
+  56:./lcd.h       **** }
+  57:./lcd.h       **** 
+  58:./lcd.h       **** void latch(void)
+  59:./lcd.h       **** {
+  60:./lcd.h       **** PORTC&=~0x04;
+  61:./lcd.h       **** dely_ns(200);  
+  62:./lcd.h       **** PORTC|=0x04;
+  63:./lcd.h       **** dely_ns(200);  
+  64:./lcd.h       **** PORTC&=~0x04;
+  65:./lcd.h       **** }
+  66:./lcd.h       **** 
+  67:./lcd.h       **** void dely_ns(unsigned char tim)
+  68:./lcd.h       **** {
+  74               	ue end (size=0) */
+  76               	.LM1:
+  77               		sts j,__zero_reg__
+  69:./lcd.h       **** 0);  
+  78               	 r18,k
+  79               		ldi r25,lo8(0)
+  80 0000 1092 0000 		rjmp .L2
+  81 0004 2091 0000 	.L3:
+  83 000a 00C0      	.LM2:
+  84               		subi r25,lo8(-(1))
+  85               		ldi r18,lo8(11)
+  86               	.L2:
+  87 000c 9F5F      		cp r25,r24
+  88 000e 2BE0      		brlo .L3
+  89               		sts k,r18
+  90 0010 9817      		sts j,r25
+  91 0012 00F0      	/* epilogue: frame size=0 */
+  92 0014 2093 0000 		ret
+  93 0018 9093 0000 	/* epilogue end (size=1) */
+  94               	/* function dely_ns size 15 (14) */
+  96               	.Lscope0:
+  98               	.global	latch
+ 100               	latch:
+ 102               	.LM3:
+ 103               	/* prologue: frame size=0 */
+ 104               	/* prologue end (size=0) */
+ 106               	.LM4:
+ 107               		cbi 53-0x20,2
+ 109               	.LM5:
+ 110 001e AA98      		ldi r24,lo8(-56)
+ 111               		call dely_ns
+ 113 0020 88EC      	.LM6:
+ 114 0022 0E94 0000 		sbi 53-0x20,2
+ 116               	.LM7:
+ 117 0026 AA9A      		ldi r24,lo8(-56)
+ 118               		call dely_ns
+ 120 0028 88EC      	.LM8:
+ 121 002a 0E94 0000 		cbi 53-0x20,2
+ 122               	/* epilogue: frame size=0 */
+ 123               		ret
+ 124 002e AA98      	/* epilogue end (size=1) */
+ 125               	/* function latch size 10 (9) */
+ 127               	.Lscope1:
+ 130               	.global	lcd_cmd
+ 132               	lcd_cmd:
+ 134               	.LM9:
+ 135               	/* prologue: frame size=0 */
+  70:./lcd.h       **** md(0x02);
+  71:./lcd.h       **** 	lcd_cmd(0X80);
+  72:./lcd.h       **** 	delay_ms(20);
+  73:./lcd.h       **** }
+  74:./lcd.h       **** 
+  75:./lcd.h       **** void latch(void)
+  76:./lcd.h       **** {
+  77:./lcd.h       **** PORTC&=~0x04;
+ 136               	24
+ 138               	.LM10:
+ 139 0032 0F93      		in r24,53-0x20
+ 140 0034 1F93      		andi r24,lo8(-8)
+ 141               		out 53-0x20,r24
+  78:./lcd.h       **** cmd(0x01);
+ 143               		mov r24,r16
+ 144               		andi r24,lo8(-16)
+ 145 0038 85B3      		out 53-0x20,r24
+ 147 003c 85BB      	.LM12:
+  79:./lcd.h       **** ay_ms(20);
+ 148               	 latch
+ 150 003e 802F      	.LM13:
+ 151 0040 807F      		clr r17
+ 152 0042 85BB      		andi r16,lo8(15)
+  80:./lcd.h       **** );
+ 153               	 r17,hi8(15)
+ 154               		ldi r24,4
+ 155 0044 0E94 0000 	1:	lsl r16
+  81:./lcd.h       **** d char str[32]);
+ 156               	l r17
+ 157               		dec r24
+ 158 0048 1127      		brne 1b
+ 159 004a 0F70      		out 53-0x20,r16
+ 161 004e 84E0      	.LM14:
+ 162 0050 000F      		call latch
+ 163 0052 111F      	/* epilogue: frame size=0 */
+ 164 0054 8A95      		pop r17
+ 165 0056 01F4      		pop r16
+ 166 0058 05BB      		ret
+  82:./lcd.h       **** id);
+ 167               	 end (size=3) */
+ 168               	/* function lcd_cmd size 25 (20) */
+ 170               	.Lscope2:
+ 173 0062 0895      	.global	lcd_char
+ 175               	lcd_char:
+ 177               	.LM15:
+ 178               	/* prologue: frame size=0 */
+ 179               		push r17
+ 180               	/* prologue end (size=1) */
+ 181               		mov r17,r24
+  83:./lcd.h       **** unsigned char k=0,j=0;
+  84:./lcd.h       **** unsigned char save=0;
+  85:./lcd.h       **** 
+  86:./lcd.h       **** void lcd_init(void);
+  87:./lcd.h       **** void lcd_cmd(unsigned char cmd);
+ 183               	lo8(1)
+ 184               		out 53-0x20,r24
+ 186 0064 1F93      	.LM17:
+ 187               		out 53-0x20,__zero_reg__
+  88:./lcd.h       **** 
+ 189               	
+ 190               		mov r24,r17
+ 191 0068 81E0      		andi r24,lo8(-16)
+ 192 006a 85BB      		ori r24,lo8(1)
+  89:./lcd.h       ****  the 2d row 3rd column
+ 193               	t 53-0x20,r24
+ 195 006c 15BA      	.LM19:
+  90:./lcd.h       **** -- Will set the cursor at a particular position on of the LCD.
+ 196               	ll latch
+ 198 006e 812F      	.LM20:
+ 199 0070 807F      		swap r17
+ 200 0072 8160      		andi r17,0xf0
+ 201 0074 85BB      		ori r17,lo8(1)
+  91:./lcd.h       **** we give lcd_showvalue(0xFF) then 255 will be displayed.
+ 202               	3-0x20,r17
+ 204 0076 0E94 0000 	.LM21:
+  92:./lcd.h       **** lue()- This will show a 3-digit decimal value on the LCD. For example if
+ 205               	ll latch
+ 206               	/* epilogue: frame size=0 */
+ 207 007a 1295      		pop r17
+ 208 007c 107F      		ret
+ 209 007e 1160      	/* epilogue end (size=2) */
+ 210 0080 15BB      	/* function lcd_char size 19 (16) */
+  93:./lcd.h       ****  this would be
+ 211               		lcd_char, .-lcd_char
+ 212               	.Lscope3:
+ 215 0086 1F91      	.global	lcd_string
+ 217               	lcd_string:
+ 219               	.LM22:
+ 220               	/* prologue: frame size=0 */
+ 221               		push r14
+ 222               		push r15
+ 223               		push r16
+ 224               		push r17
+ 225               		push r28
+  94:./lcd.h       **** l display A. Again lcd_char('b')
+  95:./lcd.h       **** 			  will display b.
+  96:./lcd.h       **** 	lcd_string()---- This function will display a string. An example of this would be
+  97:./lcd.h       **** 			  like lcd_string("This is AVR")
+ 226               	ologue end (size=6) */
+ 227               		movw r14,r24
+ 229 008a EF92      	.LM23:
+ 230 008c FF92      		ldi r24,lo8(1)
+ 231 008e 0F93      		out 53-0x20,r24
+ 233 0092 CF93      	.LM24:
+ 234 0094 DF93      		out 53-0x20,__zero_reg__
+ 235               		ldi r16,lo8(0)
+ 236 0096 7C01      		ldi r17,hi8(0)
+  98:./lcd.h       ****  will display b.
+  99:./lcd.h       **** 	lcd_string()---- This function will display a string. An example of this would be
+ 237               	.L14:
+ 239 0098 81E0      	.LM25:
+ 240 009a 85BB      		cpi r25,lo8(16)
+ 100:./lcd.h       **** l display A. Again lcd_char('b')
+ 241               	e .L15
+ 243 009c 15BA      	.LM26:
+ 244 009e 00E0      		ldi r24,lo8(-64)
+ 245 00a0 10E0      		call lcd_cmd
+ 246 00a2 00C0      	.L15:
+ 101:./lcd.h       **** ---- This function will display a single character on the LCD display.
+ 102:./lcd.h       **** 			  For example lcd_char(0x61) will display A. Again lcd_char('b')
+ 103:./lcd.h       **** 			  will display b.
+ 248               		ld r24,Y
+ 249               		andi r24,lo8(-16)
+ 250 00a4 9031      		ori r24,lo8(1)
+ 251 00a6 01F4      		out 53-0x20,r24
+ 104:./lcd.h       **** l display a single character on the LCD display.
+ 252               	abn	68,0,106,.LM28-lcd_string
+ 253               	.LM28:
+ 254 00a8 80EC      		call latch
+ 256               	.LM29:
+ 105:./lcd.h       **** LCD. For e.g lcd_cmd(0x01) will give the clear command.
+ 257               	24,Y
+ 258               		swap r24
+ 259 00ae 8881      		andi r24,0xf0
+ 260 00b0 807F      		ori r24,lo8(1)
+ 261 00b2 8160      		out 53-0x20,r24
+ 106:./lcd.h       **** 	lcd_cmd() ------ This function is used to give any command instructions to the
+ 263               	
+ 264               		call latch
+ 265 00b6 0E94 0000 		subi r16,lo8(-(1))
+ 107:./lcd.h       **** efore calling any other functions
+ 266               	bci r17,hi8(-(1))
+ 267               	.L13:
+ 268 00ba 8881      		mov r25,r16
+ 270 00be 807F      	.LM31:
+ 271 00c0 8160      		movw r28,r14
+ 272 00c2 85BB      		add r28,r16
+ 108:./lcd.h       ****  before
+ 273               	9,__zero_reg__
+ 274               		ld r24,Y
+ 275 00c4 0E94 0000 		tst r24
+ 276 00c8 0F5F      		brne .L14
+ 277 00ca 1F4F      	/* epilogue: frame size=0 */
+ 278               		pop r29
+ 279 00cc 902F      		pop r28
+ 280               		pop r17
+ 281               		pop r16
+ 282 00ce E701      		pop r15
+ 283 00d0 C00F      		pop r14
+ 284 00d2 D11D      		ret
+ 285 00d4 8881      	/* epilogue end (size=7) */
+ 286 00d6 8823      	/* function lcd_string size 47 (34) */
+ 291 00de 1F91      	.Lscope4:
+ 294 00e4 EF90      	.global	lcd_showvalue
+ 296               	lcd_showvalue:
+ 298               	.LM32:
+ 299               	/* prologue: frame size=0 */
+ 300               		push r13
+ 301               		push r14
+ 302               		push r15
+ 303               		push r16
+ 304               		push r17
+ 305               	/* prologue end (size=5) */
+ 306               		mov r13,r24
+ 109:./lcd.h       **** header files have implementation of some common finctions of the LCD.
+ 110:./lcd.h       **** 	Include this header file in your C code. Call the lcd_init() function before
+ 111:./lcd.h       **** 	calling any other functions to initialize the lcd.
+ 112:./lcd.h       **** 
+ 113:./lcd.h       **** 
+ 114:./lcd.h       **** 	lcd_init() ----- Call the lcd_init() function before calling any other functions
+ 115:./lcd.h       **** 			  to initialize the lcd.
+ 308               	ivmodqi4
+ 309               		mov r18,r24
+ 311 00e8 DF92      	.LM34:
+ 312 00ea EF92      		ldi r25,lo8(100)
+ 313 00ec FF92      		mov r14,r25
+ 314 00ee 0F93      		mul r24,r14
+ 315 00f0 1F93      		movw r14,r0
+ 316               		clr r1
+ 317 00f2 D82E      		mov r24,r13
+ 116:./lcd.h       **** nctions to initialize the lcd.
+ 117:./lcd.h       **** 
+ 318               	sub r24,r14
+ 319               		sbc r25,r15
+ 320 00f4 64E6      		ldi r22,lo8(10)
+ 321 00f6 0E94 0000 		ldi r23,hi8(10)
+ 322 00fa 282F      		call __divmodhi4
+ 118:./lcd.h       **** ns of the LCD.
+ 323               	 r16,r22
+ 325 00fc 94E6      	.LM35:
+ 326 00fe E92E      		mov r24,r18
+ 327 0100 8E9D      		subi r24,lo8(-(48))
+ 328 0102 7001      		call lcd_char
+ 330 0106 8D2D      	.LM36:
+ 331 0108 9927      		mov r24,r16
+ 332 010a 8E19      		subi r24,lo8(-(48))
+ 333 010c 9F09      		call lcd_char
+ 335 0110 70E0      	.LM37:
+ 336 0112 0E94 0000 		sub r13,r14
+ 337 0116 8B01      		ldi r24,lo8(10)
+ 119:./lcd.h       **** /*	LCD.h
+ 120:./lcd.h       **** K-TECHNOLOGY embedded systems
+ 121:./lcd.h       **** 
+ 338               	ovw r24,r0
+ 339               		clr r1
+ 340 0118 822F      		sub r13,r24
+ 341 011a 805D      		mov r24,r13
+ 342 011c 0E94 0000 		subi r24,lo8(-(48))
+ 122:./lcd.h       **** /*	LCD.h
+ 343               	 lcd_char
+ 344               	/* epilogue: frame size=0 */
+ 345 0120 802F      		pop r17
+ 346 0122 805D      		pop r16
+ 347 0124 0E94 0000 		pop r15
+ 123:./lcd.h       **** /*	LCD.h
+ 348               	r14
+ 349               		pop r13
+ 350 0128 DE18      		ret
+ 351 012a 8AE0      	/* epilogue end (size=6) */
+ 352 012c 089F      	/* function lcd_showvalue size 48 (37) */
+ 357 0136 805D      	.Lscope5:
+ 361 013e 0F91      	.global	lcd_gotoxy
+ 363 0142 EF90      	lcd_gotoxy:
+ 365 0146 0895      	.LM38:
+ 366               	/* prologue: frame size=0 */
+ 367               	/* prologue end (size=0) */
+ 369               	.LM39:
+ 370               		tst r24
+ 371               		brne .L22
+ 373               	.LM40:
+ 374               		mov r24,r22
+ 375               		subi r24,lo8(-(-128))
+ 376               		call lcd_cmd
+ 377               		ret
+ 378               	.L22:
+ 124:./lcd.h       **** /*	LCD.h
+ 125:./lcd.h       **** K-TECHNOLOGY embedded systems
+ 126:./lcd.h       **** 
+ 127:./lcd.h       **** 	This header files have implementation of some common finctions of the LCD.
+ 379               	xy
+ 380               	.LM41:
+ 381               		cpi r24,lo8(1)
+ 382               		brne .L26
+ 128:./lcd.h       **** /*	LCD.h
+ 383               	abn	68,0,134,.LM42-lcd_gotoxy
+ 384               	.LM42:
+ 385 0148 8823      		mov r24,r22
+ 386 014a 01F4      		subi r24,lo8(-(-64))
+ 129:./lcd.h       **** /*	LCD.h
+ 130:./lcd.h       **** K-TECHNOLOGY embedded systems
+ 387               	l lcd_cmd
+ 388               	.L26:
+ 389 014c 862F      		ret
+ 390 014e 8058      	/* epilogue: frame size=0 */
+ 391 0150 0E94 0000 	/* epilogue: noreturn */
+ 392 0154 0895      	/* epilogue end (size=0) */
+ 393               	/* function lcd_gotoxy size 14 (14) */
+ 131:./lcd.h       **** /*	LCD.h
+ 132:./lcd.h       **** K-TECHNOLOGY embedded systems
+ 394               	lcd_gotoxy, .-lcd_gotoxy
+ 395               	.Lscope6:
+ 133:./lcd.h       **** /*	LCD.h
+ 134:./lcd.h       **** K-TECHNOLOGY embedded systems
+ 398               	bal	delay_ms
+ 400 015a 862F      	delay_ms:
+ 402 015e 0E94 0000 	.LM43:
+ 403               	/* prologue: frame size=0 */
+ 404 0162 0895      	/* prologue end (size=0) */
+ 405               		rjmp .L28
+ 406               	.L29:
+ 408               	.LM44:
+ 409               		ldi r18,lo8(0)
+ 410               		ldi r19,hi8(0)
+ 411               	.L30:
+ 413               	.LM45:
+ 414               	/* #APP */
+ 415               		nop
+ 135:./lcd.h       **** /*	LCD.h
+ 136:./lcd.h       **** K-TECHNOLOGY embedded systems
+ 137:./lcd.h       **** 
+ 138:./lcd.h       **** 	This header files have implementation of some common finctions of the LCD.
+ 139:./lcd.h       **** 	Include this header file in your C code. Call the lcd_init() function before
+ 140:./lcd.h       **** 	calling any other functions to initialize the lcd.
+ 416               	LM46-delay_ms
+ 417               	.LM46:
+ 418               	/* #NOAPP */
+ 419               		subi r18,lo8(-(1))
+ 420 0164 00C0      		sbci r19,hi8(-(1))
+ 421               		ldi r20,hi8(3276)
+ 141:./lcd.h       **** ions of the LCD.
+ 142:./lcd.h       **** 	Include this header file in your C code. Call the lcd_init() function before
+ 143:./lcd.h       **** 	calling any other functions to initialize the lcd.
+ 422               	18,lo8(3276)
+ 423               		cpc r19,r20
+ 424 0166 20E0      		brne .L30
+ 425 0168 30E0      	.L28:
+ 144:./lcd.h       **** ions of the LCD.
+ 145:./lcd.h       **** 	Include this header file in your C code. Call the lcd_init() function before
+ 146:./lcd.h       **** 	calling any other functions to initialize the lcd.
+ 147:./lcd.h       **** 
+ 427               	:
+ 428               		sbiw r24,1
+ 429               		ldi r18,hi8(-1)
+ 430 016a 0000      		cpi r24,lo8(-1)
+ 431               		cpc r25,r18
+ 432               		brne .L29
+ 433               	/* epilogue: frame size=0 */
+ 434 016c 2F5F      		ret
+ 435 016e 3F4F      	/* epilogue end (size=1) */
+ 436 0170 4CE0      	/* function delay_ms size 17 (16) */
+ 441               	.Lscope7:
+ 443 0178 0197      	.global	lcd_init
+ 445 017c 8F3F      	lcd_init:
+ 447 0180 01F4      	.LM48:
+ 448               	/* prologue: frame size=0 */
+ 449 0182 0895      	/* prologue end (size=0) */
+ 451               	.LM49:
+ 452               		ldi r24,lo8(20)
+ 453               		ldi r25,hi8(20)
+ 454               		call delay_ms
+ 456               	.LM50:
+ 457               		in r24,53-0x20
+ 458               		sts save,r24
+ 460               	.LM51:
+ 461               		ldi r24,lo8(-1)
+ 462               		out 52-0x20,r24
+ 464               	.LM52:
+ 465               		ldi r24,lo8(15)
+ 466               		ldi r25,hi8(15)
+ 467 0184 84E1      		call delay_ms
+ 469 0188 0E94 0000 	.LM53:
+ 470               		ldi r24,lo8(32)
+ 471               		out 53-0x20,r24
+ 473 018e 8093 0000 	.LM54:
+ 474               		ldi r24,lo8(1)
+ 475               		call lcd_cmd
+ 477 0194 84BB      	.LM55:
+ 478               		ldi r24,lo8(2)
+ 479               		call lcd_cmd
+ 481 0198 90E0      	.LM56:
+ 482 019a 0E94 0000 		ldi r24,lo8(-128)
+ 483               		call lcd_cmd
+ 485 019e 80E2      	.LM57:
+ 486 01a0 85BB      		ldi r24,lo8(20)
+ 487               		ldi r25,hi8(20)
+ 488               		call delay_ms
+ 489 01a2 81E0      	/* epilogue: frame size=0 */
+ 490 01a4 0E94 0000 		ret
+ 491               	/* epilogue end (size=1) */
+ 492               	/* function lcd_init size 29 (28) */
+ 494 01aa 0E94 0000 	.Lscope8:
+ 496               	.global	lcd_clear
+ 498 01b0 0E94 0000 	lcd_clear:
+ 500               	.LM58:
+ 501 01b4 84E1      	/* prologue: frame size=0 */
+ 502 01b6 90E0      	/* prologue end (size=0) */
+ 504               	.LM59:
+ 505 01bc 0895      		ldi r24,lo8(1)
+ 506               		call lcd_cmd
+ 507               	/* epilogue: frame size=0 */
+ 508               		ret
+ 509               	/* epilogue end (size=1) */
+ 510               	/* function lcd_clear size 4 (3) */
+ 512               	.Lscope9:
+ 148:./lcd.h       **** ns of the LCD.
+ 149:./lcd.h       **** 	Include this header file in your C code. Call the lcd_init() function before
+ 150:./lcd.h       **** 	calling any other functions to initialize the lcd.
+ 151:./lcd.h       **** 
+ 152:./lcd.h       **** 
+ 514               	
+ 516               	.Ltext2:
+ 153:./lcd.h       ****  of the LCD.
+ 518               	60:
+ 519               	/* prologue: frame size=0 */
+ 520 01be 81E0      	/* prologue end (size=0) */
+ 522               	.LM61:
+ 523 01c4 0895      		sts (delaycounter1)+1,__zero_reg__
+ 524               		sts delaycounter1,__zero_reg__
+ 525               		ldi r18,lo8(0)
+ 526               		ldi r19,hi8(0)
+ 527               	.L40:
+ 529               	.LM62:
+ 530               		ldi r20,lo8(0)
+ 531               		ldi r21,hi8(0)
+ 532               	.L41:
+ 534               	.LM63:
+   1:./delay.h     **** /*	LCD.h
+   2:./delay.h     **** K-TECHNOLOGY embedded systems
+   3:./delay.h     **** 
+   4:./delay.h     **** 	this header file provides time delay in the form of mili second and micro second
+   5:./delay.h     **** 	without affecting any interrupts.
+   6:./delay.h     **** 
+   7:./delay.h     **** 	delayms()  this function provides delay in the form of mili second
+   8:./delay.h     **** 	delayus()  this function provides delay in the form of micro second
+   9:./delay.h     **** 	
+  10:./delay.h     **** */
+  11:./delay.h     **** #ifndef _DELAY_H_
+  12:./delay.h     **** #define _DELAY_H_
+  13:./delay.h     **** unsigned int delaycounter1,delaycounter2;
+  14:./delay.h     **** void delayms(unsigned int delaytime)
+  15:./delay.h     **** {
+ 535               	nop
+ 536               		nop
+ 537               		nop
+ 538               		nop
+  16:./delay.h     **** 
+  17:./delay.h     **** 	 for(delaycounter1=0;delaycounter1<=delaytime;delaycounter1++)
+ 539               	
+ 541 01c6 1092 0000 	.LM64:
+ 542 01ca 1092 0000 		nop
+ 543 01ce 20E0      		nop
+ 544 01d0 30E0      		nop
+ 545               		nop
+ 546               		nop
+ 547               		nop
+ 548 01d2 40E0      	/* #NOAPP */
+ 549 01d4 50E0      		subi r20,lo8(-(1))
+ 550               		sbci r21,hi8(-(1))
+  18:./delay.h     **** 	 {
+  19:./delay.h     **** 		 for(delaycounter2=0;delaycounter2<=800;delaycounter2++)
+  20:./delay.h     **** 		  {
+  21:./delay.h     **** 		  asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");
+ 551               	0,19,.LM65-delayms
+ 552               	.LM65:
+ 553               		ldi r22,hi8(801)
+ 554 01d6 0000      		cpi r20,lo8(801)
+ 555 01d8 0000      		cpc r21,r22
+ 556 01da 0000      		brne .L41
+ 557 01dc 0000      		subi r18,lo8(-(1))
+ 558 01de 0000      		sbci r19,hi8(-(1))
+  22:./delay.h     **** 		  asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");
+ 560               	p r24,r18
+ 561               		cpc r25,r19
+ 562 01e2 0000      		brsh .L40
+ 563 01e4 0000      		sts (delaycounter1)+1,r19
+ 564 01e6 0000      		sts delaycounter1,r18
+ 565 01e8 0000      		sts (delaycounter2)+1,r21
+ 566 01ea 0000      		sts delaycounter2,r20
+ 567 01ec 0000      	/* epilogue: frame size=0 */
+ 568               		ret
+ 569 01ee 4F5F      	/* epilogue end (size=1) */
+ 570 01f0 5F4F      	/* function delayms size 52 (51) */
+ 572               	.Lscope10:
+ 575 01f6 5607      	.global	delayus
+ 577 01fa 2F5F      	delayus:
+ 579               	.LM67:
+ 580               	/* prologue: frame size=0 */
+ 581 01fe 8217      	/* prologue end (size=0) */
+ 583 0202 00F4      	.LM68:
+ 584 0204 3093 0000 		sts (delaycounter1)+1,__zero_reg__
+ 585 0208 2093 0000 		sts delaycounter1,__zero_reg__
+ 586 020c 5093 0000 		ldi r18,lo8(0)
+ 587 0210 4093 0000 		ldi r19,hi8(0)
+ 588               	.L50:
+ 590               	.LM69:
+ 591               	/* #APP */
+ 592               		nop
+ 593               		nop
+ 594               		nop
+ 595               		nop
+ 596               		nop
+ 597               		nop
+  23:./delay.h     **** 		  }
+  24:./delay.h     **** 		
+  25:./delay.h     **** 	 }
+  26:./delay.h     **** }
+  27:./delay.h     **** 
+  28:./delay.h     **** void delayus(unsigned int delaytime)
+  29:./delay.h     **** {
+ 599               	)+1,__zero_reg__
+ 600               		sts delaycounter1,__zero_reg__
+ 601               		ldi r18,lo8(0)
+ 602               		ldi r19,hi8(0)
+  30:./delay.h     **** 
+  31:./delay.h     **** 	 for(delaycounter1=0;delaycounter1<=delaytime;delaycounter1++)
+ 603               	ayus
+ 604               	.LM67:
+ 605 0216 1092 0000 	/* prologue: frame size=0 */
+ 606 021a 1092 0000 	/* prologue end (size=0) */
+ 608 0220 30E0      	.LM68:
+ 609               		sts (delaycounter1)+1,__zero_reg__
+  32:./delay.h     **** 	 {
+  33:./delay.h     **** 		 
+  34:./delay.h     **** 		  asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");asm("nop");
+ 610               	elayus
+ 612               	delayus:
+ 614 0224 0000      	.LM67:
+ 615 0226 0000      	/* prologue: frame size=0 */
+ 616 0228 0000      	/* prologue end (size=0) */
+ 618 022c 0000      	.LM68:
+  35:./delay.h     **** 		  asm("nop");asm("nop");asm("nop");asm("nop");
+ 619               	delaytime:P(0,4)",64,0,0,24
+ 620               	.global	delayus
+ 622 0230 0000      	delayus:
+ 624 0234 0000      	.LM67:
+ 625               	/* prologue: frame size=0 */
+ 626 0236 2F5F      	/* prologue end (size=0) */
+ 628               	.LM68:
+ 629               		sts (delaycounter1)+1,__zero_reg__
+ 630 023a 8217      		sts delaycounter1,__zero_reg__
+ 631 023c 9307      		ldi r18,lo8(0)
+ 632 023e 00F4      		ldi r19,hi8(0)
+ 633 0240 3093 0000 	.L50:
+ 635               	.LM69:
+ 636 0248 0895      	/* #APP */
+ 637               		nop
+ 638               		nop
+ 639               		nop
+ 640               		nop
+ 641               		nop
+ 642               		nop
+ 644               	.LM70:
+ 645 000a 6C65 6674 		nop
+ 645      2074 7572 
+ 645      6E00 
+ 646               		nop
+ 647 0014 466F 7277 		nop
+ 647      6172 6420 
+ 647      2000 
+ 648               		nop
+ 649 001e 7269 6768 	/* #NOAPP */
+ 649      7420 7475 
+ 649      726E 00
+ 650               		subi r18,lo8(-(1))
+ 651 0029 7374 6F70 		sbci r19,hi8(-(1))
+ 651      2020 2020 
+ 651      2020 00
+ 653 0034 7368 6F77 	.LM71:
+ 653      2068 616E 
+ 653      6420 00
+ 654               		cp r24,r18
+ 655               		cpc r25,r19
+ 656               		brsh .L50
+ 657               		sts (delaycounter1)+1,r19
+ 658               		sts delaycounter1,r18
+ 659               	/* epilogue: frame size=0 */
+ 660               		ret
+   1:main.c        **** #include <avr/io.h>
+   2:main.c        **** #include <lcd.h>
+   3:main.c        **** #include <delay.h>
+   4:main.c        **** 
+   5:main.c        **** int main(void)
+   6:main.c        **** {
+ 661               	
+ 662               		sbci r19,hi8(-(1))
+ 664               	.LM71:
+   7:main.c        **** 	DDRA=0x00;
+ 665               	#APP */
+ 666               		nop
+ 667 024a 1ABA      		nop
+   8:main.c        **** 	PORTA=0x00;
+ 669               	.LM68:
+ 670 024c 1BBA      		sts (delaycounter1)+1,__zero_reg__
+   9:main.c        **** 	DDRB=0xF0;
+ 671               	elayus
+ 673 024e 80EF      	delayus:
+  10:main.c        **** 	PORTB=0x00;
+ 675               	ms size 52 (51) */
+ 677 0252 18BA      	.Lscope10:
+  11:main.c        **** 	
+  12:main.c        **** 	lcd_init();
+ 678               	nter1)+1,r19
+ 679               		sts delaycounter1,r18
+ 680 0254 0E94 0000 		sts (delaycounter2)+1,r21
+  13:main.c        **** 	lcd_gotoxy(0,1);
+ 681               	 r20,lo8(801)
+ 682               		cpc r21,r22
+ 683 0258 61E0      		brne .L41
+ 684 025a 80E0      		subi r18,lo8(-(1))
+ 685 025c 0E94 0000 		sbci r19,hi8(-(1))
+  14:main.c        **** 	lcd_string("show hand");
+ 686               	bn	68,0,17,.LM66-delayms
+ 687               	.LM66:
+ 688 0260 80E0      		cp r24,r18
+ 689 0262 90E0      		cpc r25,r19
+ 690               		brsh .L40
+ 691               		sts (delaycounter1)+1,r19
+ 692               		sts delaycounter1,r18
+ 693 0264 0E94 0000 		sts (delaycounter2)+1,r21
+  15:main.c        **** 	
+  16:main.c        **** 	while(1)
+  17:main.c        **** 	{
+  18:main.c        **** 	
+  19:main.c        **** 	
+  20:main.c        **** 		if(bit_is_clear(PINA,PA5))
+ 694               	aycounter2,r20
+ 695               	/* epilogue: frame size=0 */
+ 696 0268 CD99      		ret
+ 697 026a 00C0      	/* epilogue end (size=1) */
+  21:main.c        **** 		{
+  22:main.c        **** 			PORTB=0x80;
+ 698               	0,17,.LM66-delayms
+ 699               	.LM66:
+ 700 026c 80E8      		cp r24,r18
+ 701 026e 88BB      		cpc r25,r19
+  23:main.c        **** 			lcd_gotoxy(0,1);
+ 702               	h .L40
+ 703               		sts (delaycounter1)+1,r19
+ 704 0270 61E0      		sts delaycounter1,r18
+ 705 0272 80E0      		sts (delaycounter2)+1,r21
+ 706 0274 0E94 0000 		sts delaycounter2,r20
+  24:main.c        **** 			lcd_string("left turn");
+ 707               	22
+ 708               		brne .L41
+ 709 0278 80E0      		subi r18,lo8(-(1))
+ 710 027a 90E0      		sbci r19,hi8(-(1))
+ 712               	.LM66:
+  25:main.c        **** 		}
+  26:main.c        **** 		
+  27:main.c        **** 		else
+  28:main.c        **** 		if(bit_is_clear(PINA,PA2))
+ 713               	4,r18
+ 714               		cpc r25,r19
+ 715 027e CA99      		brsh .L40
+ 716 0280 00C0      		sts (delaycounter1)+1,r19
+  29:main.c        **** 		{
+  30:main.c        **** 			PORTB=0xA0;
+ 717               		68,0,19,.LM65-delayms
+ 718               	.LM65:
+ 719 0282 80EA      		ldi r22,hi8(801)
+ 720 0284 88BB      		cpi r20,lo8(801)
+  31:main.c        **** 			lcd_gotoxy(0,1);
+ 721               	 r21,r22
+ 722               		brne .L41
+ 723 0286 61E0      		subi r18,lo8(-(1))
+ 724 0288 80E0      		sbci r19,hi8(-(1))
+  32:main.c        **** 			lcd_string("Forward  ");
+ 726               	:
+ 727               		cp r24,r18
+ 728 028e 80E0      		cpc r25,r19
+ 729 0290 90E0      		brsh .L40
+ 730 0292 00C0      		sts (delaycounter1)+1,r19
+ 731               		sts delaycounter1,r18
+  33:main.c        **** 		}
+  34:main.c        **** 		
+  35:main.c        **** 		else
+  36:main.c        **** 		if(bit_is_clear(PINA,PA1))
+ 732               	LM65:
+ 733               		ldi r22,hi8(801)
+ 734 0294 C999      		cpi r20,lo8(801)
+ 735 0296 00C0      		cpc r21,r22
+  37:main.c        **** 		{
+  38:main.c        **** 			PORTB=0x20;
+ 736               	e .L41
+ 737               		subi r18,lo8(-(1))
+ 738 0298 80E2      		sbci r19,hi8(-(1))
+  39:main.c        **** 			lcd_gotoxy(0,1);
+ 740               	6:
+ 741               		cp r24,r18
+ 742 029c 61E0      		cpc r25,r19
+ 743 029e 80E0      		brsh .L40
+ 744 02a0 0E94 0000 		sts (delaycounter1)+1,r19
+  40:main.c        **** 			lcd_string("right turn");
+ 745               		68,0,19,.LM65-delayms
+ 746               	.LM65:
+ 747 02a4 80E0      		ldi r22,hi8(801)
+ 748 02a6 90E0      		cpi r20,lo8(801)
+ 749 02a8 00C0      		cpc r21,r22
+ 750               		brne .L41
+  41:main.c        **** 		}
+  42:main.c        **** 		
+  43:main.c        **** 		else
+  44:main.c        **** 		{
+  45:main.c        **** 			PORTB=0x00;
+ 751               	r18,lo8(-(1))
+ 752               		sbci r19,hi8(-(1))
+  46:main.c        **** 			lcd_gotoxy(0,1);
+ 754               	66:
+ 755               		cp r24,r18
+ 756 02ac 61E0      		cpc r25,r19
+ 757 02ae 80E0      		brsh .L40
+ 758 02b0 0E94 0000 		sts (delaycounter1)+1,r19
+  47:main.c        **** 			lcd_string("stop      ");
+ 759               		68,0,19,.LM65-delayms
+ 760               	.LM65:
+ 761 02b4 80E0      		ldi r22,hi8(801)
+ 762 02b6 90E0      		cpi r20,lo8(801)
+ 763 02b8 0E94 0000 		cpc r21,r22
+  48:main.c        **** 			delayms(100);
+ 764               	 .L41
+ 765               		subi r18,lo8(-(1))
+ 766 02bc 84E6      		sbci r19,hi8(-(1))
+ 768 02c0 0E94 0000 	.LM66:
+  49:main.c        **** 			lcd_gotoxy(0,1);
+ 769               	24,r18
+ 770               		cpc r25,r19
+ 771 02c4 61E0      		brsh .L40
+ 772 02c6 80E0      		sts (delaycounter1)+1,r19
+ 773 02c8 0E94 0000 		sts delaycounter1,r18
+  50:main.c        **** 			lcd_string("show hand ");
+ 774               	LM65:
+ 775               		ldi r22,hi8(801)
+ 776 02cc 80E0      		cpi r20,lo8(801)
+ 777 02ce 90E0      		cpc r21,r22
+ 778 02d0 00C0      		brne .L41
+ 779               		subi r18,lo8(-(1))
+ 780               		sbci r19,hi8(-(1))
+ 782               	.LM66:
+ 783               		cp r24,r18
+ 784               		cpc r25,r19
+ 785               		brsh .L40
+ 786               		sts (delaycounter1)+1,r19
+ 787               		sts delaycounter1,r18
+ 788               		sts (delaycounter2)+1,r21
+ 789               		sts delaycounter2,r20
+ 790               	/* epilogue: frame size=0 */
+ 791 0000 00        		ret
+ 792               	/* epilogue end (size=1) */
+ 793               	/* function delayms size 52 (51) */
+ 795               	.Lscope10:
+ 798               	.global	delayus
+ 800               	delayus:
+ 802               	.LM67:
+ 803 0002 00        	/* prologue: frame size=0 */
+ 804               	/* prologue end (size=0) */
+ 806               	.LM68:
+ 807               		sts (delaycounter1)+1,__zero_reg__
+ 808               		sts delaycounter1,__zero_reg__
+ 809               		ldi r18,lo8(0)
+ 810               		ldi r19,hi8(0)
+ 811               	.L50:
+ 813               	.LM69:
+ 814               	/* #APP */
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:3      *ABS*:0000003f __SREG__
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:4      *ABS*:0000003e __SP_H__
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:5      *ABS*:0000003d __SP_L__
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:71     .text:00000000 dely_ns
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:796    .bss:00000001 j
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:790    .bss:00000000 k
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:103    .text:0000001e latch
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:135    .text:00000032 lcd_cmd
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:182    .text:00000064 lcd_char
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:225    .text:0000008a lcd_string
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:307    .text:000000e8 lcd_showvalue
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:378    .text:00000148 lcd_gotoxy
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:415    .text:00000164 delay_ms
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:460    .text:00000184 lcd_init
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:802    .bss:00000002 save
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:513    .text:000001be lcd_clear
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:532    .text:000001c6 delayms
+                            *COM*:00000002 delaycounter1
+                            *COM*:00000002 delaycounter2
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:598    .text:00000216 delayus
+C:\Users\user\AppData\Local\Temp/ccQILbKj.s:658    .text:0000024a main
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+__udivmodqi4
+__divmodhi4
